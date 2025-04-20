@@ -38,7 +38,7 @@ const ControllerLogin = {
             };
     
             const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-            return res.status(200).json({
+            res.header('Authorization', `Bearer ${accessToken}`).status(200).json({
                 user,
                 accessToken,
             });
@@ -88,6 +88,17 @@ const ControllerLogin = {
             const query = `DELETE FROM user WHERE user_id = ?`;
             const [results] = pool.query(query, [id]);
             res.status(200).json(results);
+        } catch (error) {
+            console.error("Error:", error.message);
+            return res.status(500).json({ error: error.message });
+        }
+    },
+    getDetailUser : async(req, res) => {
+        const id = req.params.id;
+        try {
+            const query = `SELECT * FROM users WHERE username = ?`;
+            const [results] = await pool.query(query, [id]);
+            res.status(200).json(results)
         } catch (error) {
             console.error("Error:", error.message);
             return res.status(500).json({ error: error.message });

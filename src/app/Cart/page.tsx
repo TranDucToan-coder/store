@@ -6,6 +6,7 @@ import { removeItemFromCart } from './AddItem'
 import "../CSS/nav.css"
 import axios from "axios"
 import Link from "next/link"
+import { AddDetailOrder, AddOrder } from "../callAPI/API"
 
 const Cart = ({ }: {
 }) => {
@@ -59,28 +60,26 @@ type MainCart = {
 const MainCart = ({ cartItems, handleChangeQuantity, handleRemoveItem, total }: MainCart
 ) => {
   const submit = async () => {
-    if (sessionStorage.getItem("token") == null) {
+    if (!sessionStorage.getItem("token")) {
       window.alert("Vui lòng đăng nhập để mua hàng");
       return;
     }
     try {
       const now = new Date();
-      const convertUTC = new Date(now.getTime() + (7 * 60 * 60 * 1000)).toISOString;
-      const getDate = convertUTC.toString().slice(0, 11)
-      console.log("User Information:", sessionStorage.getItem("information"));
-      const response = await axios.post("http://localhost:3001/order/submit", {
-        user_id: sessionStorage.getItem("information"),
+      const convertUTC = new Date(now.getTime() + (7 * 60 * 60 * 1000)).toISOString();
+      const getDate = convertUTC.slice(0, 10)
+      const id = sessionStorage.getItem("information");
+
+      const order_id = await AddOrder({
+        user_id: Number(id),
         order_date: getDate,
         total_amount: total,
         status: "Chưa thanh toán",
       });
-
-      if (response.status === 200) {
-        window.alert("Đơn hàng đã được gửi thành công!");
-        console.log(response.data);
-      } else {
-        window.alert("Có lỗi xảy ra, vui lòng thử lại sau.");
-      }
+        await AddDetailOrder({ order_id, cartItems })
+        console.log("Order and details successfully processed!");
+        localStorage.removeItem("cartKey");
+        window.location.reload();
     } catch (error) {
       console.error("Error submitting order:", error);
       window.alert("Không thể gửi đơn hàng, vui lòng kiểm tra kết nối mạng.");
@@ -145,7 +144,7 @@ type MiniCartProps = {
   handleToggleCart: (state: boolean) => void;
   handleRemoveItem: (item: product) => void;
 };
-export const MiniCart = React.memo(({cartItems, total, handleToggleCart, handleRemoveItem} : (MiniCartProps)) =>  {
+export const MiniCart = React.memo(({ cartItems, total, handleToggleCart, handleRemoveItem }: (MiniCartProps)) => {
   return (
     <div className="absolute top-10 right-0 w-150 min-h-60 h-auto  border rounded-xl border-solid bg-white z-1000 float-right">
       <div className="">
@@ -158,7 +157,7 @@ export const MiniCart = React.memo(({cartItems, total, handleToggleCart, handleR
             <p className="w-30">{item.product_name}</p>
             <p className="w-1">{item.quantity}</p>
             <p className="w-10">{(item.quantity * item.price).toFixed(2)}</p>
-            <button onClick={() => {handleRemoveItem(item), handleToggleCart(false)}} className="w-6 h-6 border rounded-full cursor-pointer">X</button>
+            <button onClick={() => { handleRemoveItem(item), handleToggleCart(false) }} className="w-6 h-6 border rounded-full cursor-pointer">X</button>
           </div>
         ))}
       </div>
@@ -168,8 +167,9 @@ export const MiniCart = React.memo(({cartItems, total, handleToggleCart, handleR
         <p className="text-xl float-right ml-60">{total.toFixed(2)}</p>
       </div>
       <div className="flex justify-center">
-         <button className="w-90 h-10 mb-10 border rounded-2xl m-4 hover:text-red-500 transition duration-300 ease-in-out shadow-md"><Link href="./Cart">Tới trang thanh toán</Link></button>
+        <button className="w-90 h-10 mb-10 border rounded-2xl m-4 hover:text-red-500 transition duration-300 ease-in-out shadow-md"><Link href="./Cart">Tới trang thanh toán</Link></button>
       </div>
-     </div>
-)});
+    </div>
+  )
+});
 export default Cart

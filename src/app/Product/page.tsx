@@ -7,33 +7,21 @@ import product from '../model'
 import Pagination from "../paginate";
 import Paginated from "../usePagination";
 import { addItemToCart } from "../Cart/AddItem";
+import { getProduct } from "../callAPI/API";
 
-const ListProduct = ({ results }: { results: string }) => {
+const ListProduct = () => {
   const [data, setData] = useState<product[]>([]);
   const [page, setPage] = useState(1);
   const limit = 9;
   const { totalPages, paginated } = Paginated({ page, limit, data })
-  const getData = async () => {
-    const response = await axios.get("http://localhost:3001/product");
-    if (response) {
-      setData(response.data);
-    }
-    else {
-      console.log("Can't get data");
-    }
+  const getData = async() => {
+    const value = await getProduct();
+    setData(value)
   }
   useEffect(() => {
     getData();
-  }, [results])
-  const FilteredData = (results || "").trim()
-    ? paginated.filter(a => {
-      if (!a.product_name) {
-        console.warn("Missing product_name in item:", a);
-        return false;
-      }
-      return a.product_name.toLowerCase().includes(results.toLowerCase());
-    })
-    : paginated;
+  }, [])
+
 const handleAddItem = (item : product) => {
   addItemToCart(item)
 }
@@ -41,7 +29,7 @@ return (
   <div className="">
     <div className="flex w-330 h-auto min-h-100 flex-wrap m-auto justify-between mt-10 mb-20">
       {
-        FilteredData.map((product) => (
+        paginated.map((product) => (
           <div key={product.product_id} className="w-100 h-145 border rounded-md mt-10">
             <div className="w-[80%] h-[60%] p-5 m-auto mt-5 shadow-2 overflow-hidden">
               <img src={`./` + product.image_url} alt="none" className="w-[80%] max-w-60 scale-100 ml-10 hover:transition-all hover:scale-120 hover:overflow-none"></img>
