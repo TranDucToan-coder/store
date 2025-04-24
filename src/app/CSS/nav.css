@@ -5,11 +5,12 @@
 .item::after{
     content: "";
     position: absolute;
-    width: 100%;
+    width: 80%;
     height: 2px;
     background-color: aqua;
     inset: 0;
-    top: 40px;
+    top: 70px;
+    margin: 0 auto;
 }
 .item:hover::after{
     background-color: rgb(58, 80, 80);

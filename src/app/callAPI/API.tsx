@@ -3,9 +3,17 @@ import { useState } from "react";
 import product from "../model";
 import order from "../model";
 
+export const instance = axios.create({
+    baseURL: "http://localhost:3001",
+    timeout: 3000,
+    headers: {
+      "Authorization": "Bearer token"
+    }
+})
+
 export async function getProduct() {
     try {
-        const response = await axios.get("http://localhost:3001/product");
+        const response = await instance.get("/product");
         if (response) {
             return response.data;
         }
@@ -19,7 +27,7 @@ export async function getProduct() {
 }
 export async function getOrderOfUser({ username }: { username: string }) {
     try {
-        const response = await axios.get(`http://localhost:3001/login/detail/${username}`);
+        const response = await instance.get(`/login/detail/${username}`);
         if (response) {
             const results = response.data[0];
             return results;
@@ -32,7 +40,7 @@ export async function getOrderOfUser({ username }: { username: string }) {
 }
 export async function getUser({ username }: { username: string }) {
     try {
-        const response = await axios.get(`http://localhost:3001/order/user/${username}`)
+        const response = await instance.get(`/order/user/${username}`)
         if (response) {
             return response.data;
         }
@@ -49,7 +57,7 @@ export async function AddOrder({ user_id, order_date, total_amount, status }: {
 }
 ) {
     try {
-        const response = await axios.post(`http://localhost:3001/order/submit`, {
+        const response = await instance.post(`/order/submit`, {
             user_id, order_date, total_amount, status
         })
         if (response.status === 200) {
@@ -64,14 +72,13 @@ export async function AddOrder({ user_id, order_date, total_amount, status }: {
     }
 
 }
-
 export async function AddDetailOrder({ order_id, cartItems }: {
     cartItems: product[],
     order_id: number
 }) {
     try {
         for (const item of cartItems) {
-            const response = await axios.post(`http://localhost:3001/order/detailOrder`, {
+            const response = await instance.post(`/order/detailOrder`, {
                 order_id,
                 product_id: item.product_id,
                 quantity: item.quantity,
@@ -86,9 +93,42 @@ export async function AddDetailOrder({ order_id, cartItems }: {
 
 export async function getDetailOrder (order_id : number) {
     try {
-        const response = await axios.get(`http://localhost:3001/order/${order_id}`);
+        const response = await instance.get(`/order/${order_id}`);
         if(response)
             return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getCountItem() {
+    try {
+        const response = await instance.get("/dashboard/totalItem");
+        if(response){
+            return response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getCountCustomer() {
+    try {
+        const response = await instance.get("/dashboard/totalCustomer");
+        if(response){
+            return response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export async function getCountStaff() {
+    try {
+        const response = await instance.get("/dashboard/totalStaff");
+        if(response){
+            return response.data;
+        }
     } catch (error) {
         console.log(error);
     }

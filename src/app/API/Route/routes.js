@@ -9,5 +9,4 @@ route.put('/updateProduct/:id', ProductController.updateProduct);
 route.delete('/deleteProduct/:id', ProductController.deleteProduct);
 
 
-
 module.exports = route;

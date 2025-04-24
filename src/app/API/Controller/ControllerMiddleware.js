@@ -9,9 +9,7 @@ const pool = mysql2.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
-
-const SECRET_KEY = '983922519b19b299f5823bfbe82a191f8546347d0bdd951eb539458b0b3c9708';
-
+const SECRET_KEY = "983922519b19b299f5823bfbe82a191f8546347d0bdd951eb539458b0b3c9708"; 
 const ControllerMiddleware = {
     getAuthorToken: (req, res, next) => {
         const token = req.headers["authorization"].split(' ')[1];

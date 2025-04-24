@@ -25,14 +25,10 @@ const Profile = ({ }) => {
     };
 
     useEffect(() => {
-        const isAuthenticated = sessionStorage.getItem('token');
-        if (!isAuthenticated) {
-            router.push("./")
-        }
-        else
-            getData();
+        getData();
     }, []);
-    return (<div className="w-[80%] min-h-200 m-auto pt-10 flex flex-wrap justify-center">
+    return (
+    <div className="w-[80%] min-h-200 m-auto pt-10 flex flex-wrap justify-center">
         <section>
             <div className="w-50 min-h-60 rounded-sm shadow-2xl mr-10">
                 <p className="not-active:text-red p-5" onClick={() => setActiveSection("information")}><Link href={"./User"}>Thông tin cá nhân</Link></p>
@@ -44,7 +40,8 @@ const Profile = ({ }) => {
         <section>
             {activeSection === "information" ? (<Information data={data}></Information>) : (<History></History>)}
         </section>
-    </div>);
+    </div>
+    );
 
 }
 export default Profile

@@ -9,9 +9,7 @@ const pool = mysql2.createPool({
     connectionLimit: 10,
     queueLimit: 0
 });
-
-const SECRET_KEY = '983922519b19b299f5823bfbe82a191f8546347d0bdd951eb539458b0b3c9708';
-
+const SECRET_KEY = "983922519b19b299f5823bfbe82a191f8546347d0bdd951eb539458b0b3c9708"; 
 const ControllerLogin = {
     getData: async (req, res) => {
         try {
@@ -21,14 +19,13 @@ const ControllerLogin = {
                 return res.status(400).json({ message: "Username and password must be provided" });
             }
     
-            const query = `SELECT username, user_id FROM users WHERE username = ? AND password = ?`;
+            const query = `SELECT username, user_id, role FROM users WHERE username = ? AND password = ?`;
             const [results] = await pool.query(query, [username, password]);
             console.log("Query Results:", results); 
     
             if (results.length === 0) {
                 return res.status(401).json({ message: "Thông tin đăng nhập không chính xác" });
             }
-    
             const user = results[0];
             console.log("Authenticated User:", user); 
     

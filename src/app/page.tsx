@@ -93,6 +93,8 @@ const Navigate = ({ handleToggleSearchBox, handleToggleLogin, handleToggleCart }
   const logOut = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("username")
+    document.cookie = (`token=; path=/;Expires=Thu, 01 Jan 1970 00:00:00 UTC;`);
+    document.cookie = (`role=; path=/;Expires=Thu, 01 Jan 1970 00:00:00 UTC;`);
     window.location.reload();
   }
 
@@ -102,14 +104,17 @@ const Navigate = ({ handleToggleSearchBox, handleToggleLogin, handleToggleCart }
   }
   const [token, setToken] = useState<string>('');
   const [username, setUsername] = useState<string>('');
-
+  const [role, setRole] = useState<string>('');
+  const [banner, setBanner] = useState<string[]>([]);
   useEffect(() => {
     const username = sessionStorage.getItem("username")
     const storedToken = sessionStorage.getItem("token");
+    const role = sessionStorage.getItem("role");
+    const storedBanner = JSON.parse(localStorage.getItem("banner") || '["bg1.jpg","bg2.jpg","bg3.jpg","bg4.jpg"]');
     setToken(storedToken || "");
-    setUsername(username || "")
-    console.log(token);
-    console.log(username)
+    setUsername(username || "");
+    setRole(role || "");
+    setBanner(storedBanner);
   }, []);
   return (
     <div className="relative">
@@ -127,7 +132,13 @@ const Navigate = ({ handleToggleSearchBox, handleToggleLogin, handleToggleCart }
                 <div className="relative text-white cursor-pointer" onClick={() => subNavigate()}>Welcome: {username}</div>
                 {state && (
                   <div className="absolute top-20 w-50 min-h-20 h-auto z-100 bg-white p-5 cursor-pointer" onMouseLeave={() => subNavigate()}>
-                    <Link href={'./User'}><p className="hover: scale(1.2) mb-2">Personal information</p></Link>
+                    { role == "customer" ? (
+                      <Link href={'./User'}><p className="hover: scale(1.2) mb-2">Personal information</p></Link>
+                    ) : (
+                      <Link href={'./Admin'}><p className="hover: scale(1.2) mb-2">Personal information</p></Link>
+                    )
+
+                    }
                     <hr className="text-gray-200"></hr>
                     <p className="mb-2 mt-2">Order</p>
                     <hr className="text-gray-200"></hr>
@@ -156,18 +167,13 @@ const Navigate = ({ handleToggleSearchBox, handleToggleLogin, handleToggleCart }
       </div>
       <div className="flex w-[100%] justify-center flex-wrap absolute -top-55 z-[-100] sm:w-[70%] md:w-[80%] lg:w-[100%]">
         <Slider {...settings} className="w-[100%] h-20">
-          <div className="">
-            <img src="./bg/bg1.jpg" className="w-full h-200 m-auto brightness-50"></img>
+          {
+            banner.map((value, index) => (
+              <div key={index}>
+            <img src={value.startsWith("blob:") ? value : `./bg/${value}`} className="w-full h-200 m-auto brightness-50"></img>
           </div>
-          <div>
-            <img src="./bg/bg2.jpg" className="w-full h-200 m-auto brightness-50"></img>
-          </div>
-          <div>
-            <img src="./bg/bg3.jpg" className="w-full h-200 m-auto brightness-50"></img>
-          </div>
-          <div>
-            <img src="./bg/bg4.jpg" className="w-full h-200 m-auto brightness-50"></img>
-          </div>
+            ))
+          }
         </Slider>
       </div>
     </div>
@@ -184,9 +190,11 @@ const LoginForm = ({ setShowLogin, setShowRegister }: {
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://localhost:3001/login', { username, password });
-      sessionStorage.setItem('token', response.data.accessToken);
       sessionStorage.setItem('username', response.data.user.username);
-      sessionStorage.setItem('information', response.data.user.user_id);
+      sessionStorage.setItem('*', response.data.user.user_id);
+      sessionStorage.setItem("role", response.data.user.role);
+      document.cookie = `token=${response.data.accessToken};path=/;Secure;SameSite=Strict`;
+      document.cookie = `role=${response.data.user.role};path=/;Secure;SameSite=Strict`;
       setError("");
       window.location.reload();
       setShowLogin(false)
