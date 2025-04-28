@@ -184,18 +184,20 @@ const LoginForm = ({ setShowLogin, setShowRegister }: {
   setShowRegister: (state: boolean) => void;
 }) => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [error, setError] = useState('');
   const [show, setShow] = useState(false);
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/login', { username, password });
+      const response = await axios.post('http://localhost:3001/login', { username, password});
       sessionStorage.setItem('username', response.data.user.username);
       sessionStorage.setItem('*', response.data.user.user_id);
       sessionStorage.setItem("role", response.data.user.role);
+      sessionStorage.setItem("token", response.data.accessToken);
       document.cookie = `token=${response.data.accessToken};path=/;Secure;SameSite=Strict`;
       document.cookie = `role=${response.data.user.role};path=/;Secure;SameSite=Strict`;
       setError("");
+      
       window.location.reload();
       setShowLogin(false)
     } catch (err: any) {

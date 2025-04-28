@@ -25,6 +25,15 @@ export async function getProduct() {
         console.log(error);
     }
 }
+export async function getDetailProduct ({product_id}: {product_id : number}) {
+    try {
+        const response = await axios.get(`http://localhost:3001/product/${product_id}`);
+        if(response)
+            return response.data[0];
+    } catch (error) {
+        console.log(error);
+    }
+}
 export async function getOrderOfUser({ username }: { username: string }) {
     try {
         const response = await instance.get(`/login/detail/${username}`);

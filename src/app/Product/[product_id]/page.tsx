@@ -10,6 +10,7 @@ export default function Product() {
   const router = useRouter();
   const [data, setData] = useState<product | null>(null);
   const { product_id } = useParams();
+
   const getData = async () => {
     try {
       const response = await axios.get(`http://localhost:3001/product/${product_id}`);

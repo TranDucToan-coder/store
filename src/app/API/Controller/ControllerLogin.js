@@ -1,5 +1,7 @@
 const mysql2 = require('mysql2/promise');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 const pool = mysql2.createPool({
     host: 'localhost',
     user: 'root',
@@ -27,7 +29,12 @@ const ControllerLogin = {
                 return res.status(401).json({ message: "Thông tin đăng nhập không chính xác" });
             }
             const user = results[0];
-            console.log("Authenticated User:", user); 
+            console.log("Authenticated User:", user);
+           //const checkPass = bcrypt.compare(password, user.password);
+           //if(!checkPass)
+           //{
+           //    res.status(400).json({message : "Invalid Password"})
+           //}
     
             const payload = {
                 user_id: user.user_id,
@@ -50,7 +57,8 @@ const ControllerLogin = {
             const query = `INSERT INTO users(username, password, email, phone, address, role) VALUES(?,?,?,?,?,?)`;
             if(req.body != null)
             {
-                const [results] = await pool.query(query, [username, password, email, phone, address, role])
+                const cryptPass = await bcrypt.hash(password, 10);
+                const [results] = await pool.query(query, [username, cryptPass, email, phone, address, role])
                 res.status(200).json(results);
             }
             else

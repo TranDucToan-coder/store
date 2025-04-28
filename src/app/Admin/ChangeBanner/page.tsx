@@ -10,8 +10,9 @@ const ChangeBanner = ({} : {
     const HandleChangeFile = (event : React.ChangeEvent<HTMLInputElement>, index : number) => {
         if(event.target.files && event.target.files[0]){
             const file = event.target.files[0];
+            const filename = file.name;
             const updateImg = [...banner];
-            updateImg[index] = URL.createObjectURL(file);
+            updateImg[index] = filename;
             setBanner(updateImg);
             localStorage.setItem("banner", JSON.stringify(updateImg));
         }
@@ -22,7 +23,7 @@ const ChangeBanner = ({} : {
                 <div key={index} className="flex m-10">
                     <img
                         className="w-100 h-75"
-                        src={value.startsWith("blob:") ? value : `/bg/${value}`} 
+                        src={value.length == 0 ? value : `/bg/${value}`} 
                         alt={`Banner ${index + 1}`}
                     />
                     <div>

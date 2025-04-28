@@ -1,11 +1,9 @@
 "use client"
-
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import user from "../model"
-import order from "../model"
-import orderDetail from "../model"
+import {user} from "../model"
+import {order} from "../model"
+import {orderDetail} from "../model"
 import Link from "next/link";
 import { getDetailOrder, getOrderOfUser, getUser } from "../callAPI/API"
 
@@ -23,12 +21,14 @@ const Profile = ({ }) => {
             console.error("Error fetching user details:", err.message);
         }
     };
-
+    const token = JSON.stringify(sessionStorage.getItem("token"));
+    const role = sessionStorage.getItem("role");
     useEffect(() => {
-        getData();
+            getData();
     }, []);
     return (
-    <div className="w-[80%] min-h-200 m-auto pt-10 flex flex-wrap justify-center">
+        token ? (
+            <div className="w-[80%] min-h-200 m-auto pt-10 flex flex-wrap justify-center">
         <section>
             <div className="w-50 min-h-60 rounded-sm shadow-2xl mr-10">
                 <p className="not-active:text-red p-5" onClick={() => setActiveSection("information")}><Link href={"./User"}>Thông tin cá nhân</Link></p>
@@ -41,6 +41,7 @@ const Profile = ({ }) => {
             {activeSection === "information" ? (<Information data={data}></Information>) : (<History></History>)}
         </section>
     </div>
+        ) : (<>Please login when coming here</>)
     );
 
 }
@@ -49,7 +50,7 @@ export default Profile
 const History = ({ }: {}) => {
     const [data, setData] = useState<order[]>([]);
     const getData = async () => {
-        const username = typeof window !== 'undefined' ? sessionStorage.getItem("information") : null;
+        const username = typeof window !== 'undefined' ? sessionStorage.getItem("*") : null;
         if (username) {
             const value = await getUser({ username })
             setData(value);
