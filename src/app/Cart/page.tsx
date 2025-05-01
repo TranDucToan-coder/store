@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
-import product from "../model"
+import {product} from "../model"
 import { removeItemFromCart } from './AddItem'
 import "../CSS/nav.css"
 import axios from "axios"

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
-import product from "../model";
-import order from "../model";
+import {product} from "../model";
+import {order} from "../model";
 
 export const instance = axios.create({
     baseURL: "http://localhost:3001",
@@ -109,6 +109,25 @@ export async function getDetailOrder (order_id : number) {
         console.log(error);
     }
 }
+export async function updateProduct ({
+    product_name, category_id, price, description, stock_quantity, image_url, product_id} : 
+    {
+        product_id : number,
+        product_name : string, 
+        category_id : number, 
+        price : number, 
+        description : string, 
+        stock_quantity : number, 
+        image_url : string
+}) {
+    try {
+        const response = await instance.put(`/product/updateProduct/${product_id}`, {product_name,category_id, price ,description,stock_quantity, image_url});
+        if(response)
+            return response.data[0];
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export async function getCountItem() {
     try {
@@ -140,5 +159,32 @@ export async function getCountStaff() {
         }
     } catch (error) {
         console.log(error);
+    }
+}
+export async function getCustomer() {
+    try {
+        const response = await instance.get("/customer");;
+        if(response)
+            return response.data;
+    } catch (error) {
+        console.log(error)
+    }
+}
+export async function getDetailCustomer({username} : {username : string}) {
+    try {
+        const response = await instance.get(`/customer/${username}`);
+        if(response)
+            return response.data[0];
+    } catch (error) {
+        console.log(error)
+    }
+}
+export async function deleteUser({username} : {username : string}) {
+    try {
+        const response = await instance.delete(`/delUser/${username}`);
+        if(response)
+            return response.data;
+    } catch (error) {
+        console.log(error)
     }
 }

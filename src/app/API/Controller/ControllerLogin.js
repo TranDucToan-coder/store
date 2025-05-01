@@ -87,28 +87,6 @@ const ControllerLogin = {
             return res.status(500).json({ error: error.message });
         }
     },
-    deleteUser : async (req, res) => {
-        const id = req.params;
-        try {
-            const query = `DELETE FROM user WHERE user_id = ?`;
-            const [results] = pool.query(query, [id]);
-            res.status(200).json(results);
-        } catch (error) {
-            console.error("Error:", error.message);
-            return res.status(500).json({ error: error.message });
-        }
-    },
-    getDetailUser : async(req, res) => {
-        const id = req.params.id;
-        try {
-            const query = `SELECT * FROM users WHERE username = ?`;
-            const [results] = await pool.query(query, [id]);
-            res.status(200).json(results)
-        } catch (error) {
-            console.error("Error:", error.message);
-            return res.status(500).json({ error: error.message });
-        }
-    },
 }
 
 module.exports = ControllerLogin;

@@ -47,12 +47,12 @@ const ProductController = {
             stock_quantity = ?, 
             image_url = ?
             WHERE product_id = ?`;
-          //const results = await pool.query(query, [product_name, category_id, price, description, stock_quantity, image_url, product_id]);
-          //console.log(results)
-          //return res.status(200).json(results);
-          const cache_key = `updateProduct:${product_id}`
-          const product = await fetchData(cache_key, query, [product_name, category_id, price, description, stock_quantity, image_url , product_id]);
-          return res.status(200).json(product)
+          const results = await pool.query(query, [product_name, category_id, price, description, stock_quantity, image_url, product_id]);
+          console.log(results)
+          return res.status(200).json(results);
+          //const cache_key = `updateProduct:${product_id}`
+          //const product = await fetchData(cache_key, query, [product_name, category_id, price, description, stock_quantity, image_url , product_id]);
+          //return res.status(200).json(product)
         } catch (error) {
           console.error(error);
           return res.status(500).json({ error: error.message });
@@ -60,7 +60,6 @@ const ProductController = {
       },
       insertProduct: async (req, res) => {
         try {
-            console.log(req.body);
             const {product_name, category_id, price, description, stock_quantity, image_url } = req.body;
             const query = `INSERT INTO Products (product_name, category_id, price, description, stock_quantity, image_url) VALUES (?, ?, ?, ?, ?, ?)`;
             const results = await pool.query(query, [product_name, category_id, price, description, stock_quantity, image_url]);
