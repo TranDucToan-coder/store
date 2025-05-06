@@ -20,9 +20,8 @@ const ControllerLogin = {
             if (!username || !password) {
                 return res.status(400).json({ message: "Username and password must be provided" });
             }
-    
-            const query = `SELECT username, user_id, role FROM users WHERE username = ? AND password = ?`;
-            const [results] = await pool.query(query, [username, password]);
+            const query = `SELECT username, user_id, role, password FROM users WHERE username = ?`;
+            const [results] = await pool.query(query, [username]);
             console.log("Query Results:", results); 
     
             if (results.length === 0) {
@@ -30,19 +29,16 @@ const ControllerLogin = {
             }
             const user = results[0];
             console.log("Authenticated User:", user);
-           //const checkPass = bcrypt.compare(password, user.password);
-           //if(!checkPass)
-           //{
-           //    res.status(400).json({message : "Invalid Password"})
-           //}
-    
+            const checkPass = await bcrypt.compare(password, user.password);
+            if (!checkPass) {
+                return res.status(400).json({ message: "Invalid Password" });
+            }
             const payload = {
                 user_id: user.user_id,
                 username: user.username,
             };
-    
             const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
-            res.header('Authorization', `Bearer ${accessToken}`).status(200).json({
+            return res.header('Authorization', `Bearer ${accessToken}`).status(200).json({
                 user,
                 accessToken,
             });

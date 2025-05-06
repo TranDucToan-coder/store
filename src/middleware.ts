@@ -13,7 +13,7 @@ export function middleware(req: NextRequest) {
         if (role != "customer" && url.includes("/User")) {
             return NextResponse.redirect(new URL("/User", req.url))
         }
-         else if (role != "staff" && url.includes("/Admin")) {
+         else if (role != "staff" && role != "manager" && url.includes("/Admin")) {
             return NextResponse.redirect(new URL("/Admin", req.url))
         }
     }

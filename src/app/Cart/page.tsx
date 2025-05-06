@@ -146,7 +146,8 @@ type MiniCartProps = {
 };
 export const MiniCart = React.memo(({ cartItems, total, handleToggleCart, handleRemoveItem }: (MiniCartProps)) => {
   return (
-    <div className="absolute top-10 right-0 w-150 min-h-60 h-auto  border rounded-xl border-solid bg-white z-1000 float-right">
+    <div className="absolute top-60 right-0 w-60 min-h-60 h-auto max-h-200 overflow-Y-auto overflow-auto border rounded-xl border-solid bg-white z-1000 float-right
+    sm:w-150 sm:top-10 sm:right-0">
       <div className="">
         <p className="w-10 h-10 rounded-full border float-right flex justify-center items-center m-2" onClick={() => handleToggleCart(false)}>X</p>
         <p className="p-5 text-2xl text-center ml-2">CART</p>

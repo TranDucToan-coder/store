@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import "tailwindcss";
 import "../CSS/nav.css"
-import categories from "../model";
+import {categories} from "../model";
 import Image from 'next/image';
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,8 +22,12 @@ export default function Menu() {
   const getData = async () => {
     try {
       const response = await instance.get('/categories');
-      const results = response.data;
-      setData(results);
+      if(response){
+        const results = response.data;
+        setData(results);
+      }
+      else
+        return;
     } catch (error) {
       console.error("Failed to fetch categories:", error);
       setData([]);
@@ -38,7 +42,8 @@ export default function Menu() {
   }, [])
   return (
     <>
-      <div className="w-full min-h-20 h-auto p-3 flex m-auto flex-wrap text-center items-center sticky bg-black/40 backdrop-blur-md sticky top-2 z-1000">
+      <div className="w-auto min-h-20 h-auto p-3 flex m-auto flex-wrap text-center items-center sticky bg-black/40 backdrop-blur-md sticky top-2 z-1000
+      sm:w-full">
         <div>
           <Image
             src="/images/Logo.png"

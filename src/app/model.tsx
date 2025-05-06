@@ -13,7 +13,7 @@ export interface product {
   quantity: number,
 }
 export interface user{
-  user_id : number,
+  user_id ?: number,
   username : string,
   password: string,
   email: string,

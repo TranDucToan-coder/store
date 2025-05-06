@@ -1,9 +1,8 @@
 "use client";
 
-import axios from "axios";
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
-import product from '../model'
+import {product} from '../model'
 import Pagination from "../paginate";
 import Paginated from "../usePagination";
 import { addItemToCart } from "../Cart/AddItem";
@@ -27,10 +26,11 @@ const handleAddItem = (item : product) => {
 }
 return (
   <div className="">
-    <div className="flex w-330 h-auto min-h-100 flex-wrap m-auto justify-between mt-10 mb-20">
+    <div className="flex w-100 max-w-full h-auto min-h-100 flex-wrap m-auto justify-between mt-10 mb-20
+    sm:w-330 sm:max-w-full">
       {
-        paginated.map((product) => (
-          <div key={product.product_id} className="w-100 h-145 border rounded-md mt-10">
+        paginated?.map((product) => (
+          <div key={product.product_id} className="w-100 h-145 border rounded-md mt-10 m-auto">
             <div className="w-[80%] h-[60%] p-5 m-auto mt-5 shadow-2 overflow-hidden">
               <img src={`./` + product.image_url} alt="none" className="w-[80%] max-w-60 scale-100 ml-10 hover:transition-all hover:scale-120 hover:overflow-none"></img>
             </div>

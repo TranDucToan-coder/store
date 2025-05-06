@@ -2,8 +2,10 @@
 
 const Footer = () => {
     return(
-    <div className="max-w-[100%] w-[100%] min-h-60 bg-red-100 box-sizing mt-10">
-        <div className="flex flex-wrap justify-around h-auto m-auto p-4">
+    <div className="w-auto min-h-60 bg-red-100 box-sizing mt-10
+    sm:w-full">
+        <div className="flex flex-wrap justify-start  h-auto m-auto p-4
+        sm:justify-around">
             <div className="">
                 <p className="text-xl">Giới thiệu</p>
                 <p className="text-sm/15">Giới thiệu xxx</p>

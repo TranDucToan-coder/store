@@ -57,6 +57,10 @@ const DetailOfProduct = () => {
   }
   const HandleChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    if(!Number(value)){
+      window.alert("Giá tiền mới không thể < 0");
+      return;
+    }
     if (Number(value) > 0)
       setData({ ...data, price: Number(value) })
     else {
@@ -72,32 +76,34 @@ const DetailOfProduct = () => {
     getData();
   }, [])
   return (
-    <div className="max-w-400 w-auto min-h-150 m-auto mt-20 flex justify-center">
-      <div>
-        <img src={`../../${data?.image_url}`} alt={data?.product_name} className="w-100"></img>
+    <div className="w-full min-h-150 m-auto mt-20 flex justify-center flex-wrap p-2
+    sm:max-w-400 w-20 min-h-150 sm:p-0">
+      <div className="w-auto flex flex-wrap justify-center">
+        <img src={`../../${data?.image_url}`} alt={data?.product_name} className="w-80
+        sm:w-100"></img>
         <input type="file" onChange={(e) => HandleChangeFile(e)}></input>
       </div>
-      <table className="w-200 h-auto">
-        <thead></thead>
-        <tbody className="">
-          <tr className="">
-            <td className=""><label className="">Tên sản phẩm: </label><input type="text" value={data?.product_name} onChange={(e) => HandleChangeNameProduct(e)} className="min-w-200 max-w-250 p-4"></input></td>
-          </tr>
-          <tr className="">
-            <td className=""><label className="w-50">Mã loại: </label><input type="number" value={data?.category_id} onChange={(e) => HandleChangeCategoryId(e)} className="min-w-5 max-w-20 p-2"></input></td>
-          </tr>
-          <tr className="">
-            <td><label>Số lượng tồn: </label><input type="number" value={data?.stock_quantity} onChange={(e) => HandleChangeStockQuantity(e)} className="min-w-50 max-w-80 p-2"></input></td>
-          </tr>
-          <tr className="">
-            <td><label>Giá sản phẩm: </label><input type="text" value={data?.price} onChange={(e) => HandleChangePrice(e)} className="min-w-50 max-w-70 p-2"></input></td>
-          </tr>
-          <tr>
-            <td><label>Mô tả: </label><textarea className="min-w-200 max-w-250 min-h-30" value={data?.description} onChange={(e) => HandleChangeDes(e)}></textarea></td>
-          </tr>
-        </tbody>
-        <tfoot></tfoot>
-      </table>
+      <div className="grid grid-cols-1 grid-row-1 gap-5">
+        <div className="flex items-center justify-between"><label className="">Tên sản phẩm: </label><input type="text" value={data?.product_name} onChange={(e) => HandleChangeNameProduct(e)} 
+        className="p-2 ml-2 border outline-none rounded-xl
+        focus:border-red-300 focus:transition-all focus:duration-200
+        sm:min-w-200 max-w-250 "></input></div>
+        <div className="flex items-center justify-between"><label className="w-50">Mã loại: </label><input type="number" value={data?.category_id} onChange={(e) => HandleChangeCategoryId(e)} 
+        className=" p-2 border outline-none rounded-xl
+        focus:border-red-300 focus:transition-all focus:duration-200
+        sm:min-w-200 max-w-250"></input></div>
+        <div className="flex items-center justify-between"><label>Số lượng tồn: </label><input type="text" value={data?.stock_quantity} onChange={(e) => HandleChangeStockQuantity(e)} 
+        className=" p-2 border outline-none rounded-xl
+        focus:border-red-300 focus:transition-all focus:duration-200
+        sm:min-w-200 max-w-250"></input></div>
+        <div className="flex items-center justify-between"><label>Giá sản phẩm: </label><input type="text" value={data?.price} onChange={(e) => HandleChangePrice(e)} 
+        className="p-2 border outline-none rounded-xl
+        focus:border-red-300 focus:transition-all focus:duration-200
+        sm:min-w-200 max-w-250 "></input></div>
+        <div className="flex items-center justify-between"><label>Mô tả: </label><textarea className=" min-h-30 p-2 border outline-none rounded-xl
+        focus:border-red-300 focus:transition-all focus:duration-200
+        sm:min-w-200 max-w-250" value={data?.description} onChange={(e) => HandleChangeDes(e)}></textarea></div>
+      </div>
     </div>
   )
 }

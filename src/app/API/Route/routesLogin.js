@@ -9,10 +9,10 @@ router.get("/protected", ControllerMiddleware.getAuthorToken,  (req, res) => {
     res.status(200).send(`Hello, ${req.user.username}!`);
 });
 
-router.get("/detail/:id", ControllerLogin.getDetailUser);
+//router.get("/detail/:id", ControllerLogin.getDetailUser);
 
 router.put("/update", ControllerLogin.editUser);
-router.delete("/delete", ControllerLogin.deleteUser);
+//router.delete("/delete", ControllerLogin.delete);
 router.post("/insert", ControllerLogin.createUser);
 
 module.exports = router

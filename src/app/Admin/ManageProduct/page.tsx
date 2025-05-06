@@ -7,7 +7,7 @@ import Pagination from "@/app/paginate"
 import Paginated from "@/app/usePagination"
 import Link from "next/link"
 
-const ManageProduct = ({ item }: { item: product[] }) => {
+const ManageProduct = ({}: {}) => {
     const [data, setData] = useState<product[]>([]);
     const [page, setPage] = useState(1);
     const limit = 9;
@@ -21,8 +21,9 @@ const ManageProduct = ({ item }: { item: product[] }) => {
         getData();
     }, [])
     return (
-        <div className="max-w-400 w-auto min-h-150 m-auto mt-20 flex justify-center">
-            <table className="max-w-500">
+        <div className="w-100 min-h-150 m-auto mt-20 overflow-x-auto
+        sm:max-w-[80%] sm:w-full sm:m-auto">
+            <table className="w-20 m-auto mt-20">
                 <thead className="border">
                     <tr className="text-center h-20 text-xl text-yellow-400">
                         <td>Name</td>
@@ -32,12 +33,13 @@ const ManageProduct = ({ item }: { item: product[] }) => {
                     </tr>
                 </thead>
                 {
-                    paginated.map((item) => (
+                    paginated?.map((item) => (
                         <tbody className="border">
                             <tr key={item.product_id}>
-                                <td className="min-w-150 w-auto p-10">{item.product_name}</td>
+                                <td className="w-20 p-10
+                                sm:min-w-150 w-auto p-10">{item.product_name}</td>
                                 <td className="w-30 p-10">{item.price}</td>
-                                <td className="w-50 p-10"><img src={`../../${item.image_url}`} className="w-50"></img></td>
+                                <td className="w-80 p-10"><img src={`./../../${item.image_url}`} alt="none" className="w-40"></img></td>
                                 <td className="w-20 p-10"><Link href={`./ManageProduct/${item.product_id}`}><button>Detail</button></Link></td>
                             </tr>
                         </tbody>

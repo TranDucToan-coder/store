@@ -1,7 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
-import {product} from "../model";
-import {order} from "../model";
+import {product, user} from "../model";
 
 export const instance = axios.create({
     baseURL: "http://localhost:3001",
@@ -163,7 +161,7 @@ export async function getCountStaff() {
 }
 export async function getCustomer() {
     try {
-        const response = await instance.get("/customer");;
+        const response = await instance.get("/dashboard/customer");
         if(response)
             return response.data;
     } catch (error) {
@@ -172,19 +170,57 @@ export async function getCustomer() {
 }
 export async function getDetailCustomer({username} : {username : string}) {
     try {
-        const response = await instance.get(`/customer/${username}`);
+        const response = await instance.get(`/dashboard/customer/${username}`);
         if(response)
             return response.data[0];
     } catch (error) {
         console.log(error)
     }
 }
+export async function updateUser({username, password, email, phone, address, role}: user) {
+    try {
+        const response = await instance.put(`/dashboard/employee/update/${username}`, {
+            password,
+            email,
+            phone,
+            address,
+            role
+        })
+        if(response){
+            console.log("Update complete!");
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 export async function deleteUser({username} : {username : string}) {
     try {
-        const response = await instance.delete(`/delUser/${username}`);
+        const response = await instance.delete(`/dashboard/customer/del/${username}`);
         if(response)
             return response.data;
     } catch (error) {
         console.log(error)
+    }
+}
+export async function addUser({username, password, email, phone, address, role}: user) {
+    try {
+        const response = await instance.post(`/dashboard/customer/add`, {
+            username, password, email, phone, address, role
+        });
+        if(response){
+            return response.data;
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+export async function getEmployee() {
+    try {
+        const response = await instance.get(`/dashboard/employee`);
+        if(response){
+            return response.data;
+        }
+    } catch (error) {
+        
     }
 }

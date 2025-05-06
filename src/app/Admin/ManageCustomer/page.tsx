@@ -7,7 +7,7 @@ import Link from "next/link"
 const ManageEmployee = () => {
     const [data, setData] = useState<user[]>([]);
     const getData = async () => {
-        const response = await getEmployee();
+        const response = await getCustomer();
         try {
             if (response != null) {
                 console.log(response)
@@ -23,9 +23,9 @@ const ManageEmployee = () => {
         getData();
     }, [])
     return (
-        <div className="min-w-[200px] max-w-400 min-h-200 m-auto mt-10 overflow-x-auto p-2
-        sm:p-0">
-            <table className="w-full border-collapse border border-gray-300">
+        <div className="min-w-[300px] max-w-400 min-h-200 m-auto mt-10 overflow-x-auto">
+            <Link href="./NewData/NewCustomer"><div>Thêm khách hàng</div></Link>
+            <table className="min-w-full border-collapse border border-gray-300">
                 <thead className="">
                     <tr className="">
                         <td className="p-4">Id</td>

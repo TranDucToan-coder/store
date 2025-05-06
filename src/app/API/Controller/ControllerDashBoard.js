@@ -50,35 +50,71 @@ const ControllerDashboard = ({
     },
     getDetailCustomer : async(req, res) => {
         try {
-            const {username} = req.params.id;
+            const id = req.params.id;
             const query = "SELECT * FROM users WHERE username = ?";
-            const [results] = pool.query(query, [username]);
+            const [results] = await pool.query(query, [id]);
             res.status(200).json(results)
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    addCustomer : async(req, res) => {
+        try {
+            const { username,password,email,phone,address,role} = req.body;
+            const query = `INSERT INTO users(username,password,email,phone,address,role) VALUES(?,?,?,?,?,?)`;
+            const bcryptPass = await bcrypt.hash(password, 10);
+            if(username != null || email != null || phone != null){
+                const [results] = await pool.query(query, [ username, bcryptPass, email,phone ,address ,role]);
+                res.status(200).json({results});
+            }
         } catch (error) {
             console.log(error)
         }
     },
     updateCustomer : async (req, res) => {
         try {
-            const {username} = req.params.id;
+            const username = req.params.id;
             const {password, email, phone, address, role} = req.body;
             const query = `UPDATE users SET password = ?, email = ?, phone = ?, address = ?, role = ? WHERE username = ?`;
-            const cryptPass = bcrypt.hash(password, 10);
+            const cryptPass = await bcrypt.hash(password, 10);
             const [results] = await pool.query(query, [cryptPass, email, phone, address, role, username]);
             res.status(200).json(results);
         } catch (error) {
-            console.log(error)
+            res.status(500).json(error)
         }
     },
     deleteUser : async (req, res) => {
-        const id = req.params;
+        const id = req.params.id;
         try {
             const query = `DELETE FROM user WHERE user_id = ?`;
             const [results] = pool.query(query, [id]);
             res.status(200).json(results);
         } catch (error) {
-            console.error("Error:", error.message);
-            return res.status(500).json({ error: error.message });
+            res.status(500).json(error)
+        }
+    },
+    getEmployee : async(req, res) => {
+        try {
+            const query = `SELECT * FROM users WHERE role = "staff"`;
+            const [results] = await pool.query(query);
+            res.status(200).json(results)
+        } catch (error) {
+            res.status(500).json(error)
+        }
+    },
+    updateEmployee : async (req, res) => {
+        try {
+            const username = req.params.id;
+            const {password, email, phone, address, role} = req.body;
+            const query = `
+            UPDATE users 
+            SET password = ?, email = ?, phone = ?, address = ?, role = ? 
+            WHERE username = ?`;
+            const cryptPass = await bcrypt.hash(password, 10);
+            const [results] = await pool.query(query, [cryptPass, email, phone, address, role, username]);
+            res.status(200).json(results);
+        } catch (error) {
+            res.status(500).json(error)
         }
     },
 })

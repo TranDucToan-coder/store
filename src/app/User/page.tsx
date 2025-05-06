@@ -8,7 +8,6 @@ import Link from "next/link";
 import { getDetailOrder, getOrderOfUser, getUser } from "../callAPI/API"
 
 const Profile = ({ }) => {
-    const router = useRouter();
     const [data, setData] = useState<user | null>(null);
     const [activeSection, setActiveSection] = useState<"information" | "history">("information");
     const getData = async () => {
@@ -22,7 +21,6 @@ const Profile = ({ }) => {
         }
     };
     const token = JSON.stringify(sessionStorage.getItem("token"));
-    const role = sessionStorage.getItem("role");
     useEffect(() => {
             getData();
     }, []);
