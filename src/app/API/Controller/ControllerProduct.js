@@ -25,11 +25,11 @@ const ProductController = {
         try {
             const id = req.params.id;
             const query = "SELECT * FROM Products WHERE product_id = ?";
-            //const [results] = await pool.query(query, [id]);
-            //return res.status(200).json(results);
-            const cache_key = `product:${id}`;
-            const products = await fetchData(cache_key, query, [id]);
-            return res.status(200).json(products);
+            const [results] = await pool.query(query, [id]);
+            return res.status(200).json(results);
+            //const cache_key = `product:${id}`;
+            //const products = await fetchData(cache_key, query, [id]);
+            //return res.status(200).json(products);
         } catch (error) {
             console.error(error);
             return res.status(500).json({ error: error.message });
@@ -48,11 +48,7 @@ const ProductController = {
             image_url = ?
             WHERE product_id = ?`;
           const results = await pool.query(query, [product_name, category_id, price, description, stock_quantity, image_url, product_id]);
-          console.log(results)
           return res.status(200).json(results);
-          //const cache_key = `updateProduct:${product_id}`
-          //const product = await fetchData(cache_key, query, [product_name, category_id, price, description, stock_quantity, image_url , product_id]);
-          //return res.status(200).json(product)
         } catch (error) {
           console.error(error);
           return res.status(500).json({ error: error.message });

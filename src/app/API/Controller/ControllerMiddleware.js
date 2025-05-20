@@ -12,7 +12,7 @@ const pool = mysql2.createPool({
 const SECRET_KEY = "983922519b19b299f5823bfbe82a191f8546347d0bdd951eb539458b0b3c9708"; 
 const ControllerMiddleware = {
     getAuthorToken: (req, res, next) => {
-        const token = req.headers["authorization"].split(' ')[1];
+        const token = req.headers["Authorization"].split(' ')[1];
         if (!token) {
             return res.status(401).json({ message: "Cannot find Token" });
         }

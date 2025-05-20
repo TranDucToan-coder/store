@@ -1,14 +1,15 @@
 "use client"
 
 import { addUser } from "@/app/callAPI/API"
+import { user } from "@/app/model";
 import React, { useState } from "react";
 
 const NewCustomer = () => {
-    const [userData, setUserData] = useState({
+    const [userData, setUserData] = useState<user>({
         username: "",
         password: "",
         email: "",
-        phone: "",
+        phone: 0,
         address: "",
         role: "customer",
     });
@@ -22,7 +23,7 @@ const NewCustomer = () => {
         setUserData({...userData, email : e.target.value});
     }
     const HandleChangePhone = (e : React.ChangeEvent<HTMLInputElement>) => {
-        setUserData({...userData, phone : e.target.value});
+        setUserData({...userData, phone : Number(e.target.value)});
     }
     const HandleChangeAddress = (e : React.ChangeEvent<HTMLInputElement>) => {
         setUserData({...userData, address : e.target.value});

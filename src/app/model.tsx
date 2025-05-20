@@ -3,14 +3,23 @@ export interface categories {
     category_name : string,
 }
 export interface product {
-  product_id: number,
+  product_id ?: number,
   product_name: string,
   price: number,
   image_url: string,
   category_id : number,
   description : string,
   stock_quantity : number,
-  quantity: number,
+}
+export interface cartItem {
+  product_id ?: number,
+  product_name: string,
+  price: number,
+  image_url: string,
+  category_id : number,
+  description : string,
+  stock_quantity : number,
+  quantity : number,
 }
 export interface user{
   user_id ?: number,

@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react"
-import {product} from "../model"
+import {cartItem} from "../model"
 import { removeItemFromCart } from './AddItem'
 import "../CSS/nav.css"
 import axios from "axios"
@@ -10,7 +10,7 @@ import { AddDetailOrder, AddOrder } from "../callAPI/API"
 
 const Cart = ({ }: {
 }) => {
-  const [cartItems, setCartItems] = useState<product[]>([]);
+  const [cartItems, setCartItems] = useState<cartItem[]>([]);
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedCart = JSON.parse(localStorage.getItem("cartKey") || "[]");
@@ -24,11 +24,11 @@ const Cart = ({ }: {
       return cartItems.reduce((sum, items) => sum + items.price * items.quantity, 0);
     }
   }, [cartItems]);
-  const handleRemoveItem = (item: product) => {
+  const handleRemoveItem = (item: cartItem) => {
     removeItemFromCart(item);
     setCartItems(cartItems)
   }
-  const handleChangeQuantity = (item: product, newQuantity: number) => {
+  const handleChangeQuantity = (item: cartItem, newQuantity: number) => {
     const findItem = cartItems.find(items => items.product_name === item.product_name)
     if (findItem) {
       const updatedCart = cartItems.map((cartItem) => (
@@ -52,10 +52,10 @@ const Cart = ({ }: {
 };
 
 type MainCart = {
-  cartItems: product[];
+  cartItems: cartItem[];
   total: number;
-  handleChangeQuantity: (item: product, quantity: number) => void;
-  handleRemoveItem: (item: product) => void;
+  handleChangeQuantity: (item: cartItem, quantity: number) => void;
+  handleRemoveItem: (item: cartItem) => void;
 };
 const MainCart = ({ cartItems, handleChangeQuantity, handleRemoveItem, total }: MainCart
 ) => {
@@ -139,10 +139,10 @@ const MainCart = ({ cartItems, handleChangeQuantity, handleRemoveItem, total }: 
 }
 
 type MiniCartProps = {
-  cartItems: product[];
+  cartItems: cartItem[];
   total: number;
   handleToggleCart: (state: boolean) => void;
-  handleRemoveItem: (item: product) => void;
+  handleRemoveItem: (item: cartItem) => void;
 };
 export const MiniCart = React.memo(({ cartItems, total, handleToggleCart, handleRemoveItem }: (MiniCartProps)) => {
   return (
@@ -157,7 +157,7 @@ export const MiniCart = React.memo(({ cartItems, total, handleToggleCart, handle
             <img src={`./${item.image_url}`} loading="lazy" className="w-[20%]"></img>
             <p className="w-30">{item.product_name}</p>
             <p className="w-1">{item.quantity}</p>
-            <p className="w-10">{(item.quantity * item.price).toFixed(2)}</p>
+            <p className="w-10">{(item.quantity?0:NaN * item.price).toFixed(2)}</p>
             <button onClick={() => { handleRemoveItem(item), handleToggleCart(false) }} className="w-6 h-6 border rounded-full cursor-pointer">X</button>
           </div>
         ))}

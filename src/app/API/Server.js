@@ -40,7 +40,9 @@ connect();
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
-//app.use(res.static(path.join(__dirname, 'public')))
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use("/product", productRouter);
 app.use("/categories", categoriesRouter);
 app.use("/login", loginRouter);

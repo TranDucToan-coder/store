@@ -1,9 +1,9 @@
 "use client"
 import { useState } from 'react';
-import product from '../model'
+import {cartItem} from '../model'
 
-export const addItemToCart = (item: product) => {
-  const currentCart: product[] = JSON.parse(localStorage.getItem("cartKey") || "[]");
+export const addItemToCart = (item: cartItem) => {
+  const currentCart: cartItem[] = JSON.parse(localStorage.getItem("cartKey") || "[]");
   const existProduct = currentCart.find(
     (cartItem) => cartItem.product_id === item.product_id
   );
@@ -29,8 +29,8 @@ export const addItemToCart = (item: product) => {
     return updatedCart;
   }
 };
-export const removeItemFromCart = (item : product) => {
-    const currentCart: product[] = JSON.parse(localStorage.getItem("cartKey") || "[]");
+export const removeItemFromCart = (item : cartItem) => {
+    const currentCart: cartItem[] = JSON.parse(localStorage.getItem("cartKey") || "[]");
     const existProduct = currentCart.filter((cartItems) => cartItems.product_id !== item.product_id)
     if(existProduct)
     {

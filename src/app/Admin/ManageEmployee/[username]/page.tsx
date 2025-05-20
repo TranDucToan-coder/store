@@ -5,9 +5,7 @@ import { user } from "@/app/model"
 import { useParams } from "next/navigation"
 import React, { useState, useEffect } from "react"
 
-const DetailEmployee = ({ user }: {
-    user: user
-}) => {
+const DetailEmployee = () => {
     const { username } = useParams<{ username: string }>();
     const [data, setData] = useState<user>({
         user_id: 0,
@@ -23,7 +21,7 @@ const DetailEmployee = ({ user }: {
     const [role, setRole] = useState<string | null>(null);
     const getData = async () => {
         if (username) {
-            const response = await getDetailCustomer({ username: username as string });
+            const response = await getDetailCustomer({username});
             console.log(data)
             setData(response)
         }

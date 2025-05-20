@@ -1,5 +1,5 @@
 import axios from "axios";
-import {product, user} from "../model";
+import {product, user, cartItem} from "../model";
 
 export const instance = axios.create({
     baseURL: "http://localhost:3001",
@@ -8,7 +8,18 @@ export const instance = axios.create({
       "Authorization": "Bearer token"
     }
 })
-
+export async function getCategories() {
+    try {
+        const response = await instance.get("/categories");
+        if(response){
+            return response.data;
+        }
+        else
+            return
+    } catch (error) {
+        console.log(error);
+    }
+}
 export async function getProduct() {
     try {
         const response = await instance.get("/product");
@@ -30,6 +41,22 @@ export async function getDetailProduct ({product_id}: {product_id : number}) {
             return response.data[0];
     } catch (error) {
         console.log(error);
+    }
+}
+export async function newProduct({product_name, price, image_url, category_id, description, stock_quantity} : product) {
+    try {
+        const response = await axios.post("http://localhost:3001/product/insertProduct", {
+            product_name, 
+            price, 
+            image_url, 
+            category_id, 
+            description, 
+            stock_quantity
+        })
+        if(response)
+            return response.data;
+    } catch (error) {
+        console.log(error)
     }
 }
 export async function getOrderOfUser({ username }: { username: string }) {
@@ -80,7 +107,7 @@ export async function AddOrder({ user_id, order_date, total_amount, status }: {
 
 }
 export async function AddDetailOrder({ order_id, cartItems }: {
-    cartItems: product[],
+    cartItems: cartItem[],
     order_id: number
 }) {
     try {
@@ -121,6 +148,7 @@ export async function updateProduct ({
     try {
         const response = await instance.put(`/product/updateProduct/${product_id}`, {product_name,category_id, price ,description,stock_quantity, image_url});
         if(response)
+            console.log(response.data[0])
             return response.data[0];
     } catch (error) {
         console.log(error)

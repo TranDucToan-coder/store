@@ -1,6 +1,7 @@
 const express = require("express");
 const route = express.Router();
 const ControllerDashboard = require("../Controller/ControllerDashBoard");
+const ControllerProduct = require("../Controller/ControllerProduct")
 
 route.get("/totalItem", ControllerDashboard.getCountItem);
 route.get("/totalCustomer", ControllerDashboard.getCountCustomer);

@@ -23,6 +23,7 @@ const ManageProduct = ({}: {}) => {
     return (
         <div className="w-100 min-h-150 m-auto mt-20 overflow-x-auto
         sm:max-w-[80%] sm:w-full sm:m-auto">
+            <Link href="./NewData/NewProduct"><div className="m-auto">Thêm sản phẩm</div></Link>
             <table className="w-20 m-auto mt-20">
                 <thead className="border">
                     <tr className="text-center h-20 text-xl text-yellow-400">
@@ -39,7 +40,7 @@ const ManageProduct = ({}: {}) => {
                                 <td className="w-20 p-10
                                 sm:min-w-150 w-auto p-10">{item.product_name}</td>
                                 <td className="w-30 p-10">{item.price}</td>
-                                <td className="w-80 p-10"><img src={`./../../${item.image_url}`} alt="none" className="w-40"></img></td>
+                                <td className="w-80 p-10"><img src={`./../../../${item.image_url}`} alt="none" className="w-30"></img></td>
                                 <td className="w-20 p-10"><Link href={`./ManageProduct/${item.product_id}`}><button>Detail</button></Link></td>
                             </tr>
                         </tbody>

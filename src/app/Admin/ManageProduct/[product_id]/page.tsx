@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react"
 import { product } from "../../../model"
 import { useParams } from "next/navigation"
 import axios from "axios"
+import { updateProduct } from "@/app/callAPI/API"
+
 const DetailOfProduct = () => {
   const [data, setData] = useState<product>({
     product_id: 0,
@@ -13,7 +15,6 @@ const DetailOfProduct = () => {
     price: 0,
     description: "",
     image_url: "",
-    quantity: 0
   });
   const { product_id } = useParams();
   const getData = async () => {
@@ -32,9 +33,10 @@ const DetailOfProduct = () => {
   const HandleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0] != null) {
       const file = e.target.files[0];
+      const filename = file.name
       setData((prevData) => ({
         ...prevData,
-        image_url: file.toString()
+        image_url: filename
       }))
     }
   }
@@ -72,6 +74,27 @@ const DetailOfProduct = () => {
     const value = e.target.value;
     setData({...data, description : value})
   }
+  const Submit = async() => {
+    try {
+      const response = await updateProduct({
+        product_name: data.product_name,
+        category_id: data.category_id,
+        stock_quantity: data.stock_quantity,
+        price: data.price,
+        description: data.description,
+        image_url: data.description,
+        product_id: data.product_id as number
+    })
+    if(response){
+      window.alert(`Thay đổi sản phẩm ${data.product_name} thành công`);
+      console.log(data)
+    }
+    else
+      window.alert(`Cập nhập sản phẩm thất bại`)
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     getData();
   }, [])
@@ -79,7 +102,7 @@ const DetailOfProduct = () => {
     <div className="w-full min-h-150 m-auto mt-20 flex justify-center flex-wrap p-2
     sm:max-w-400 w-20 min-h-150 sm:p-0">
       <div className="w-auto flex flex-wrap justify-center">
-        <img src={`../../${data?.image_url}`} alt={data?.product_name} className="w-80
+        <img src={`./../../../${data?.image_url}`} alt={data?.product_name} className="w-80
         sm:w-100"></img>
         <input type="file" onChange={(e) => HandleChangeFile(e)}></input>
       </div>
@@ -103,6 +126,8 @@ const DetailOfProduct = () => {
         <div className="flex items-center justify-between"><label>Mô tả: </label><textarea className=" min-h-30 p-2 border outline-none rounded-xl
         focus:border-red-300 focus:transition-all focus:duration-200
         sm:min-w-200 max-w-250" value={data?.description} onChange={(e) => HandleChangeDes(e)}></textarea></div>
+        <button className="w-10 h-10 border rounded-sm hover:border-red-400 hover:text-red-400 hover:duration-500 hover:transition-all
+        sm:w-50" onClick={() => Submit()}>Submit</button>
       </div>
     </div>
   )

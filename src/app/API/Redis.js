@@ -34,8 +34,6 @@ const fetchData = async (key, query, params) => {
     try {
         console.log(".....")
         const [results] = await pool.query(query, params);
-        console.log('Data retrieved from MySQL');
-
         await redisClient.set(key, JSON.stringify(results), {
             EX: 3600
         });
